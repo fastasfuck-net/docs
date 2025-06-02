@@ -1,677 +1,603 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevDocs - Moderne Dokumentation</title>
+    <title>FastAsFuck - Lightning Fast Performance Library</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #6366f1;
-            --primary-hover: #5855f0;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-tertiary: #f1f5f9;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-tertiary: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border-color: #334155;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: all 0.3s ease;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            padding: 2rem 0;
-            position: fixed;
-            width: 280px;
-            height: 100vh;
-            overflow-y: auto;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 3px;
-        }
-
-        .logo {
-            padding: 0 2rem 2rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-        }
-
-        .nav-section {
-            margin-bottom: 2rem;
-        }
-
-        .nav-title {
-            padding: 0 2rem 0.5rem;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: var(--text-secondary);
-            letter-spacing: 0.05em;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 0.75rem 2rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background: var(--bg-tertiary);
-            color: var(--primary-color);
-            border-left-color: var(--primary-color);
-        }
-
-        .main-content {
-            margin-left: 280px;
-            background: var(--bg-primary);
-        }
-
-        .header {
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(10px);
-        }
-
-        .search-container {
-            position: relative;
-            flex: 1;
-            max-width: 400px;
-            margin: 0 2rem;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 3rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        .theme-toggle {
-            padding: 0.5rem;
-            border: none;
-            background: var(--bg-secondary);
-            border-radius: 0.5rem;
-            cursor: pointer;
-            color: var(--text-primary);
-            transition: all 0.2s ease;
-        }
-
-        .theme-toggle:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .content {
-            padding: 3rem;
-            max-width: 900px;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 4rem;
-            padding: 4rem 0;
-            background: var(--gradient);
-            border-radius: 1rem;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #fff, #f0f9ff);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
+        
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 0.5rem;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+        
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .cta-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+        
+        .code-highlight {
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            animation: shimmer 2s infinite;
         }
-
-        .section {
-            margin-bottom: 4rem;
-            animation: fadeInUp 0.6s ease-out;
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            position: relative;
-        }
-
-        .section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -0.5rem;
-            left: 0;
-            width: 3rem;
-            height: 3px;
-            background: var(--gradient);
-            border-radius: 2px;
-        }
-
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .code-block {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 0.875rem;
-            overflow-x: auto;
-            position: relative;
-        }
-
-        .code-block::before {
-            content: 'JavaScript';
-            position: absolute;
-            top: 0.5rem;
-            right: 1rem;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .feature-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .feature-icon {
-            width: 3rem;
-            height: 3rem;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .toc {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .toc h4 {
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .toc ul {
-            list-style: none;
-        }
-
-        .toc li {
-            margin-bottom: 0.5rem;
-        }
-
-        .toc a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .toc a:hover {
-            color: var(--primary-color);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            padding: 0.5rem;
-            border: none;
-            background: var(--bg-secondary);
-            border-radius: 0.5rem;
-            cursor: pointer;
-            color: var(--text-primary);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-                width: 100%;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .content {
-                padding: 2rem 1rem;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+        
+        .performance-meter {
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 30%, #10b981 100%);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <nav class="sidebar" id="sidebar">
-            <div class="logo">🚀 DevDocs</div>
-            
-            <div class="nav-section">
-                <div class="nav-title">Getting Started</div>
-                <a href="#introduction" class="nav-link active">Einführung</a>
-                <a href="#installation" class="nav-link">Installation</a>
-                <a href="#quickstart" class="nav-link">Schnellstart</a>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-title">API Referenz</div>
-                <a href="#api-overview" class="nav-link">Übersicht</a>
-                <a href="#authentication" class="nav-link">Authentifizierung</a>
-                <a href="#endpoints" class="nav-link">Endpunkte</a>
-                <a href="#examples" class="nav-link">Beispiele</a>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-title">Erweitert</div>
-                <a href="#configuration" class="nav-link">Konfiguration</a>
-                <a href="#best-practices" class="nav-link">Best Practices</a>
-                <a href="#troubleshooting" class="nav-link">Fehlerbehebung</a>
-            </div>
-        </nav>
-
-        <main class="main-content">
-            <header class="header">
-                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-                
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" placeholder="Dokumentation durchsuchen..." id="searchInput">
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold gradient-text">⚡ FastAsFuck</div>
                 </div>
                 
-                <button class="theme-toggle" id="themeToggle">🌙</button>
-            </header>
-
-            <div class="content">
-                <div class="hero">
-                    <div class="hero-content">
-                        <h1>Moderne Dokumentation</h1>
-                        <p>Entdecken Sie unsere umfassende API-Dokumentation mit interaktiven Beispielen und modernem Design</p>
-                        <a href="#quickstart" class="cta-button">Jetzt starten →</a>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Intro</a>
+                        <a href="#features" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Features</a>
+                        <a href="#quickstart" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Quick Start</a>
+                        <a href="#api" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">API</a>
+                        <a href="#benchmarks" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Benchmarks</a>
                     </div>
                 </div>
-
-                <div class="toc">
-                    <h4>📋 Inhaltsverzeichnis</h4>
-                    <ul>
-                        <li><a href="#introduction">Einführung</a></li>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#installation">Installation</a></li>
-                        <li><a href="#quickstart">Schnellstart</a></li>
-                        <li><a href="#api-overview">API Übersicht</a></li>
-                    </ul>
+                
+                <!-- Theme Toggle & Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                    
+                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md text-gray-700 dark:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
-
-                <section id="introduction" class="section fade-in">
-                    <h2>🎯 Einführung</h2>
-                    <div class="card">
-                        <h3>Willkommen bei DevDocs</h3>
-                        <p>Diese moderne Dokumentationswebsite bietet Ihnen alle Informationen, die Sie für den erfolgreichen Einsatz unserer API benötigen. Mit einem benutzerfreundlichen Design, interaktiven Beispielen und umfassenden Erklärungen führen wir Sie durch alle Funktionen und Möglichkeiten.</p>
-                        
-                        <p>Unsere Dokumentation ist darauf ausgelegt, sowohl Anfängern als auch erfahrenen Entwicklern zu helfen. Sie finden hier:</p>
-                        <ul style="margin: 1rem 0; padding-left: 2rem;">
-                            <li>Schritt-für-Schritt Anleitungen</li>
-                            <li>Vollständige API-Referenz</li>
-                            <li>Praktische Code-Beispiele</li>
-                            <li>Best Practices und Tipps</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <section id="features" class="section fade-in">
-                    <h2>✨ Features</h2>
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">⚡</div>
-                            <h3>Schnell & Performant</h3>
-                            <p>Optimiert für maximale Geschwindigkeit und beste Benutzererfahrung mit modernsten Web-Technologien.</p>
-                        </div>
-                        
-                        <div class="feature-card">
-                            <div class="feature-icon">🎨</div>
-                            <h3>Modernes Design</h3>
-                            <p>Sauberes, intuitives Design mit Dark/Light Mode und responsivem Layout für alle Geräte.</p>
-                        </div>
-                        
-                        <div class="feature-card">
-                            <div class="feature-icon">🔍</div>
-                            <h3>Intelligente Suche</h3>
-                            <p>Finden Sie schnell was Sie suchen mit unserer erweiterten Suchfunktion und Filteroptionen.</p>
-                        </div>
-                        
-                        <div class="feature-card">
-                            <div class="feature-icon">📱</div>
-                            <h3>Mobile-First</h3>
-                            <p>Vollständig responsive und optimiert für die Nutzung auf Smartphones und Tablets.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="installation" class="section fade-in">
-                    <h2>📦 Installation</h2>
-                    <div class="card">
-                        <h3>NPM Installation</h3>
-                        <p>Installieren Sie unser Paket mit npm:</p>
-                        <div class="code-block">
-npm install devdocs-api --save</div>
-                        
-                        <h3>CDN Einbindung</h3>
-                        <p>Oder nutzen Sie unser CDN für eine schnelle Integration:</p>
-                        <div class="code-block">
-&lt;script src="https://cdn.devdocs.io/v1/devdocs.min.js"&gt;&lt;/script&gt;</div>
-                    </div>
-                </section>
-
-                <section id="quickstart" class="section fade-in">
-                    <h2>🚀 Schnellstart</h2>
-                    <div class="card">
-                        <h3>Erste Schritte</h3>
-                        <p>Hier ist ein einfaches Beispiel, um sofort loszulegen:</p>
-                        <div class="code-block">
-// Initialisierung der DevDocs API
-const api = new DevDocsAPI({
-    apiKey: 'ihr-api-schluessel',
-    baseURL: 'https://api.devdocs.io/v1'
-});
-
-// Erste API-Anfrage
-async function getData() {
-    try {
-        const response = await api.get('/users');
-        console.log('Benutzer:', response.data);
-    } catch (error) {
-        console.error('Fehler:', error.message);
-    }
-}
-
-getData();</div>
-                    </div>
-                </section>
-
-                <section id="api-overview" class="section fade-in">
-                    <h2>🔗 API Übersicht</h2>
-                    <div class="card">
-                        <h3>Verfügbare Endpunkte</h3>
-                        <p>Unsere API bietet folgende Hauptendpunkte:</p>
-                        
-                        <div style="margin: 1.5rem 0;">
-                            <strong>GET /users</strong> - Alle Benutzer abrufen<br>
-                            <strong>POST /users</strong> - Neuen Benutzer erstellen<br>
-                            <strong>GET /users/{id}</strong> - Spezifischen Benutzer abrufen<br>
-                            <strong>PUT /users/{id}</strong> - Benutzer aktualisieren<br>
-                            <strong>DELETE /users/{id}</strong> - Benutzer löschen
-                        </div>
-                        
-                        <p>Alle Endpunkte unterstützen JSON-Format und erfordern eine gültige API-Authentifizierung.</p>
-                    </div>
-                </section>
             </div>
-        </main>
-    </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 glass-effect">
+                <a href="#intro" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Intro</a>
+                <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Features</a>
+                <a href="#quickstart" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Quick Start</a>
+                <a href="#api" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">API</a>
+                <a href="#benchmarks" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Benchmarks</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900">
+        <!-- Animated Background -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast"></div>
+            <div class="absolute top-40 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 1s"></div>
+            <div class="absolute bottom-20 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 2s"></div>
+        </div>
+        
+        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div class="animate-fade-in">
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
+                    <span class="gradient-text">Fast</span>
+                    <span class="text-gray-900 dark:text-white">As</span>
+                    <span class="gradient-text">Fuck</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+                    The blazingly fast performance library that makes your code run at <strong>lightning speed</strong>. 
+                    Zero dependencies. Maximum performance. Minimum bullshit.
+                </p>
+                
+                <!-- Performance Indicator -->
+                <div class="mb-8 max-w-md mx-auto">
+                    <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">Performance Level</div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 relative overflow-hidden">
+                        <div class="performance-meter h-full rounded-full w-full"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
+                            INSANELY FAST
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#quickstart" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                        Get Started
+                        <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                    <a href="#benchmarks" class="inline-flex items-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-lg font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                        View Benchmarks
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-slide-up">
+                <div class="text-center">
+                    <div class="text-4xl font-bold gradient-text">99.9%</div>
+                    <div class="text-gray-600 dark:text-gray-400">Faster than competition</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold gradient-text">0</div>
+                    <div class="text-gray-600 dark:text-gray-400">Dependencies</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold gradient-text">< 1KB</div>
+                    <div class="text-gray-600 dark:text-gray-400">Bundle size</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+        
+        <!-- Introduction -->
+        <section id="intro" class="animate-fade-in">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Why FastAsFuck?</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Because your users don't have time to wait. In a world where every millisecond counts, 
+                    FastAsFuck delivers unparalleled performance optimization that actually matters.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">How It Works</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
+                            <div>
+                                <h4 class="font-semibold">Intelligent Caching</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Advanced memoization and result caching that learns from your usage patterns</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+                            <div>
+                                <h4 class="font-semibold">Micro-Optimizations</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Every function call optimized at the bytecode level for maximum throughput</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
+                            <div>
+                                <h4 class="font-semibold">Parallel Processing</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Automatic workload distribution across available CPU cores</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="bg-gray-900 dark:bg-gray-800 rounded-lg p-6 font-mono text-sm overflow-hidden relative">
+                        <div class="absolute inset-0 code-highlight opacity-50"></div>
+                        <div class="relative z-10">
+                            <div class="text-green-400">// Before FastAsFuck</div>
+                            <div class="text-red-400">function slowOperation(data) {</div>
+                            <div class="text-red-400">  return data.map(x => x * 2); // 847ms</div>
+                            <div class="text-red-400">}</div>
+                            <div class="mt-4 text-green-400">// After FastAsFuck</div>
+                            <div class="text-green-400">import { fast } from 'fastasfuck';</div>
+                            <div class="text-green-400">const fastOperation = fast.optimize(</div>
+                            <div class="text-green-400">  data => data.map(x => x * 2)</div>
+                            <div class="text-green-400">); // 12ms ⚡</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section id="features" class="animate-fade-in">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Features That Matter</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Built for developers who refuse to compromise on performance</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Lightning Speed</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Up to 100x faster than vanilla JavaScript operations through advanced optimization techniques</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Zero Dependencies</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Pure, self-contained code with no external dependencies. Just raw performance.</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Smart Caching</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Intelligent result caching that automatically optimizes for your most common operations</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Auto-Optimization</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Machine learning algorithms that continuously optimize your code based on runtime patterns</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Memory Efficient</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Advanced memory management that prevents leaks and optimizes garbage collection</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Production Ready</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Battle-tested in production environments serving millions of requests per day</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Start -->
+        <section id="quickstart" class="animate-fade-in">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Get Started in 30 Seconds</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">From installation to blazing fast performance in half a minute</p>
+            </div>
+            
+            <div class="space-y-8">
+                <!-- Installation -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">1</span>
+                        Installation
+                    </h3>
+                    <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-sm">
+                        <div class="text-green-400"># NPM</div>
+                        <div class="text-white">npm install fastasfuck</div>
+                        <div class="text-green-400 mt-2"># Yarn</div>
+                        <div class="text-white">yarn add fastasfuck</div>
+                        <div class="text-green-400 mt-2"># CDN</div>
+                        <div class="text-white">https://cdn.jsdelivr.net/npm/fastasfuck@latest/dist/fastasfuck.min.js</div>
+                    </div>
+                </div>
+
+                <!-- Basic Usage -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">2</span>
+                        Basic Usage
+                    </h3>
+                    <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-sm">
+                        <div class="text-blue-400">import</div> <div class="text-white">{ fast } from</div> <div class="text-green-400">'fastasfuck'</div><div class="text-white">;</div>
+                        <div class="mt-2 text-gray-500">// Optimize any function instantly</div>
+                        <div class="text-blue-400">const</div> <div class="text-white">optimizedFn = fast.optimize(</div>
+                        <div class="text-white ml-4">(data) => data.filter(x => x > 10)</div>
+                        <div class="text-white">);</div>
+                        <div class="mt-2 text-gray-500">// Your function is now 50-100x faster!</div>
+                        <div class="text-blue-400">const</div> <div class="text-white">result = optimizedFn(largeDataset);</div>
+                    </div>
+                </div>
+
+                <!-- Advanced Example -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">3</span>
+                        Advanced Usage
+                    </h3>
+                    <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-sm">
+                        <div class="text-blue-400">import</div> <div class="text-white">{ fast, cache, parallel } from</div> <div class="text-green-400">'fastasfuck'</div><div class="text-white">;</div>
+                        <div class="mt-2 text-gray-500">// Combine multiple optimizations</div>
+                        <div class="text-blue-400">const</div> <div class="text-white">superFast = fast</div>
+                        <div class="text-white ml-4">.optimize(expensiveOperation)</div>
+                        <div class="text-white ml-4">.cache({ maxSize: 1000 })</div>
+                        <div class="text-white ml-4">.parallel({ workers: 4 });</div>
+                        
+                        <div class="mt-4 text-gray-500">// Auto-optimization based on usage patterns</div>
+                        <div class="text-blue-400">const</div> <div class="text-white">smartOptimized = fast.auto(</div>
+                        <div class="text-white ml-4">complexDataProcessing,</div>
+                        <div class="text-white ml-4">{ learnFromUsage: true }</div>
+                        <div class="text-white">);</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Reference -->
+        <section id="api" class="animate-fade-in">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">API Reference</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Simple, powerful API designed for maximum performance</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Core Methods -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-6">Core Methods</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-blue-600 dark:text-blue-400 font-mono">fast.optimize(fn, options?)</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Optimizes any function for maximum performance</p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
+                                <div>fast.optimize(arr => arr.sort())</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold text-blue-600 dark:text-blue-400 font-mono">fast.cache(fn, options?)</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Adds intelligent result caching to any function</p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
+                                <div>fast.cache(expensiveFn, { maxSize: 100 })</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold text-blue-600 dark:text-blue-400 font-mono">fast.parallel(fn, options?)</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Distributes work across multiple CPU cores</p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
+                                <div>fast.parallel(heavyComputation, { workers: 4 })</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Methods -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-6">Advanced Methods</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-purple-600 dark:text-purple-400 font-mono">fast.auto(fn, options?)</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Machine learning-based auto-optimization</p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
+                                <div>fast.auto(fn, { learnFromUsage: true })</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold text-purple-600 dark:text-purple-400 font-mono">fast.batch(fns[], options?)</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Optimizes multiple functions together</p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
+                                <div>fast.batch([fn1, fn2, fn3])</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold text-purple-600 dark:text-purple-400 font-mono">fast.profile(fn)</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mt-1">Detailed performance profiling and analysis</p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
+                                <div>const stats = fast.profile(myFunction)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benchmarks -->
+        <section id="benchmarks" class="animate-fade-in">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Performance Benchmarks</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Real-world performance comparisons that speak for themselves</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Array Processing -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-bold mb-6">Array Processing (1M items)</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400">Vanilla JavaScript</span>
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <span class="text-red-500 font-mono">847ms</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400">Lodash</span>
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                                </div>
+                                <span class="text-yellow-500 font-mono">512ms</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold gradient-text">FastAsFuck</span>
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 2%"></div>
+                                </div>
+                                <span class="text-green-500 font-mono font-bold">12ms ⚡</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Object Manipulation -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-bold mb-6">Object Manipulation (100K objects)</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400">Native Methods</span>
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <span class="text-red-500 font-mono">1.2s</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-400">Ramda</span>
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
+                                    <div class="bg-orange-500 h-2 rounded-full" style="width: 70%"></div>
+                                </div>
+                                <span class="text-orange-500 font-mono">820ms</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold gradient-text">FastAsFuck</span>
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 3%"></div>
+                                </div>
+                                <span class="text-green-500 font-mono font-bold">18ms ⚡</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Summary -->
+            <div class="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-purple-900 rounded-xl p-8 text-center">
+                <h3 class="text-2xl font-bold mb-4">Performance Summary</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div>
+                        <div class="text-4xl font-bold gradient-text mb-2">70x</div>
+                        <div class="text-gray-600 dark:text-gray-400">Average Speed Improvement</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold gradient-text mb-2">95%</div>
+                        <div class="text-gray-600 dark:text-gray-400">Memory Usage Reduction</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold gradient-text mb-2">99.9%</div>
+                        <div class="text-gray-600 dark:text-gray-400">CPU Efficiency Gain</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="text-2xl font-bold gradient-text mb-4">⚡ FastAsFuck</div>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">Making your code blazingly fast, one optimization at a time</p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">GitHub</a>
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">NPM</a>
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Documentation</a>
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Discord</a>
+                </div>
+                <div class="mt-6 text-sm text-gray-500 dark:text-gray-500">
+                    © 2025 FastAsFuck. Built for speed. No compromises.
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Theme Toggle Funktionalität
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
         
-        // Gespeichertes Theme laden
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        if (savedTheme === 'dark') {
-            body.setAttribute('data-theme', 'dark');
-            themeToggle.textContent = '☀️';
+        // Check for saved theme preference or default to light
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            html.classList.add('dark');
         }
         
         themeToggle.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                body.removeAttribute('data-theme');
-                themeToggle.textContent = '🌙';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeToggle.textContent = '☀️';
-                localStorage.setItem('theme', 'dark');
-            }
+            html.classList.toggle('dark');
+            const theme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
         });
 
-        // Mobile Menu Funktionalität
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const sidebar = document.getElementById('sidebar');
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
         
         mobileMenuBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
+            mobileMenu.classList.toggle('hidden');
         });
 
-        // Navigation Links
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Aktiven Link setzen
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                
-                // Mobile Menu schließen
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        });
-
-        // Smooth Scrolling für Anker-Links
+        // Smooth Scrolling for Navigation Links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -681,27 +607,13 @@ getData();</div>
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
                 }
             });
         });
 
-        // Suchfunktionalität
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const sections = document.querySelectorAll('.section');
-            
-            sections.forEach(section => {
-                const text = section.textContent.toLowerCase();
-                if (text.includes(searchTerm) || searchTerm === '') {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
-            });
-        });
-
-        // Fade-in Animation beim Scrollen
+        // Scroll-based animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -710,37 +622,59 @@ getData();</div>
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.fade-in').forEach(el => {
+        // Observe all fade-in elements
+        document.querySelectorAll('.animate-fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
             observer.observe(el);
         });
 
-        // Keyboard Shortcuts
-        document.addEventListener('keydown', (e) => {
-            // Ctrl/Cmd + K für Suche
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                searchInput.focus();
-            }
+        // Active navigation highlight
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
             
-            // Escape zum Schließen des Mobile Menus
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('text-primary-600', 'dark:text-primary-400');
+                link.classList.add('text-gray-700', 'dark:text-gray-300');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.remove('text-gray-700', 'dark:text-gray-300');
+                    link.classList.add('text-primary-600', 'dark:text-primary-400');
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Escape to close mobile menu
             if (e.key === 'Escape') {
-                sidebar.classList.remove('open');
+                mobileMenu.classList.add('hidden');
             }
         });
 
-        // Parallax Effekt für Hero Section
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-            }
-        });
+        // Add some interactive performance indicators
+        setInterval(() => {
+            const performanceMeters = document.querySelectorAll('.performance-meter');
+            performanceMeters.forEach(meter => {
+                meter.style.transform = `scaleX(${0.9 + Math.random() * 0.1})`;
+            });
+        }, 2000);
     </script>
 </body>
 </html>
