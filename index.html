@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FastAsFuck - Lightning Fast Performance Library</title>
+    <title>FastAsFuck - Minecraft DDoS Protection Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,17 +12,18 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#eff6ff',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            900: '#1e3a8a'
+                            50: '#fef2f2',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            900: '#7f1d1d'
                         }
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.6s ease-out',
                         'slide-up': 'slideUp 0.6s ease-out',
                         'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shield-pulse': 'shieldPulse 2s ease-in-out infinite',
                     },
                     keyframes: {
                         fadeIn: {
@@ -32,6 +33,10 @@
                         slideUp: {
                             '0%': { opacity: '0', transform: 'translateY(30px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        shieldPulse: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.8' }
                         }
                     }
                 }
@@ -42,7 +47,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
         .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -55,43 +60,39 @@
         }
         
         .dark .glass-effect {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .code-highlight {
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-            animation: shimmer 2s infinite;
+        .minecraft-block {
+            background: linear-gradient(45deg, #8B4513 0%, #A0522D 25%, #8B4513 50%, #A0522D 75%, #8B4513 100%);
+            background-size: 20px 20px;
         }
         
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .performance-meter {
-            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 30%, #10b981 100%);
+        .shield-glow {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
         }
     </style>
 </head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-sans transition-colors duration-300">
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 glass-effect">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <div class="text-2xl font-bold gradient-text">⚡ FastAsFuck</div>
+                    <div class="text-2xl font-bold gradient-text">🛡️ FastAsFuck</div>
+                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">DDoS Protection</span>
                 </div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Intro</a>
+                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Introduction</a>
                         <a href="#features" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Features</a>
-                        <a href="#quickstart" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Quick Start</a>
-                        <a href="#api" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">API</a>
-                        <a href="#benchmarks" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Benchmarks</a>
+                        <a href="#setup" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Setup Guide</a>
+                        <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                        <a href="#support" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Support</a>
                     </div>
                 </div>
                 
@@ -118,73 +119,71 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="md:hidden hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 glass-effect">
-                <a href="#intro" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Intro</a>
+                <a href="#intro" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Introduction</a>
                 <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Features</a>
-                <a href="#quickstart" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Quick Start</a>
-                <a href="#api" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">API</a>
-                <a href="#benchmarks" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Benchmarks</a>
+                <a href="#setup" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Setup Guide</a>
+                <a href="#dashboard" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Dashboard</a>
+                <a href="#support" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Support</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900">
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-red-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-900 dark:to-red-900">
         <!-- Animated Background -->
         <div class="absolute inset-0 opacity-20">
-            <div class="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast"></div>
-            <div class="absolute top-40 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 1s"></div>
-            <div class="absolute bottom-20 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 2s"></div>
+            <div class="absolute top-10 left-10 w-72 h-72 bg-red-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast"></div>
+            <div class="absolute top-40 right-10 w-72 h-72 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 1s"></div>
+            <div class="absolute bottom-20 left-20 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 2s"></div>
         </div>
         
-        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
             <div class="animate-fade-in">
+                <!-- Shield Icon -->
+                <div class="mb-8 flex justify-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shield-glow animate-shield-pulse">
+                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 1l6 2v7c0 5.55-4.44 10-10 10S0 15.55 0 10V3l6-2z M10 13l-4-4 1.41-1.41L10 10.17l4.59-4.58L16 7l-6 6z"/>
+                        </svg>
+                    </div>
+                </div>
+                
                 <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
                     <span class="gradient-text">Fast</span>
                     <span class="text-gray-900 dark:text-white">As</span>
                     <span class="gradient-text">Fuck</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-                    The blazingly fast performance library that makes your code run at <strong>lightning speed</strong>. 
-                    Zero dependencies. Maximum performance. Minimum bullshit.
+                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto">
+                    Ultimate <strong>Reverse Proxy & DDoS Protection</strong> for Minecraft Servers. 
+                    Stay online 24/7 with blazing fast connections and bulletproof security.
                 </p>
                 
-                <!-- Performance Indicator -->
-                <div class="mb-8 max-w-md mx-auto">
-                    <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">Performance Level</div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 relative overflow-hidden">
-                        <div class="performance-meter h-full rounded-full w-full"></div>
-                        <div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
-                            INSANELY FAST
-                        </div>
+                <!-- Status Indicators -->
+                <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-green-500">99.9%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Uptime</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-blue-500">&lt;10ms</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Added Latency</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                        <div class="text-2xl font-bold text-purple-500">24/7</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Monitoring</div>
                     </div>
                 </div>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="#quickstart" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                        Get Started
+                    <a href="#setup" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                        Get Protected Now
                         <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
                     </a>
-                    <a href="#benchmarks" class="inline-flex items-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-lg font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
-                        View Benchmarks
+                    <a href="#features" class="inline-flex items-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-lg font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                        Learn More
                     </a>
-                </div>
-            </div>
-            
-            <!-- Stats -->
-            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-slide-up">
-                <div class="text-center">
-                    <div class="text-4xl font-bold gradient-text">99.9%</div>
-                    <div class="text-gray-600 dark:text-gray-400">Faster than competition</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold gradient-text">0</div>
-                    <div class="text-gray-600 dark:text-gray-400">Dependencies</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold gradient-text">< 1KB</div>
-                    <div class="text-gray-600 dark:text-gray-400">Bundle size</div>
                 </div>
             </div>
         </div>
@@ -196,54 +195,88 @@
         <!-- Introduction -->
         <section id="intro" class="animate-fade-in">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Why FastAsFuck?</h2>
+                <h2 class="text-4xl font-bold mb-4">Why Your Minecraft Server Needs Protection</h2>
                 <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                    Because your users don't have time to wait. In a world where every millisecond counts, 
-                    FastAsFuck delivers unparalleled performance optimization that actually matters.
+                    DDoS attacks can destroy your server's reputation, frustrate players, and cost you money. 
+                    FastAsFuck provides enterprise-grade protection that keeps you online when others go down.
                 </p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h3 class="text-2xl font-bold mb-6">How It Works</h3>
+                    <h3 class="text-2xl font-bold mb-6">The Problem</h3>
                     <div class="space-y-4">
                         <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
+                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
                             <div>
-                                <h4 class="font-semibold">Intelligent Caching</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Advanced memoization and result caching that learns from your usage patterns</p>
+                                <h4 class="font-semibold">Server Crashes</h4>
+                                <p class="text-gray-600 dark:text-gray-400">DDoS attacks overwhelm your server, causing crashes and disconnecting all players</p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
                             <div>
-                                <h4 class="font-semibold">Micro-Optimizations</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Every function call optimized at the bytecode level for maximum throughput</p>
+                                <h4 class="font-semibold">Lost Revenue</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Server downtime means lost donations, rank sales, and frustrated players leaving</p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
+                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
                             <div>
-                                <h4 class="font-semibold">Parallel Processing</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Automatic workload distribution across available CPU cores</p>
+                                <h4 class="font-semibold">Reputation Damage</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Unreliable servers lose player trust and struggle to grow their community</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="relative">
-                    <div class="bg-gray-900 dark:bg-gray-800 rounded-lg p-6 font-mono text-sm overflow-hidden relative">
-                        <div class="absolute inset-0 code-highlight opacity-50"></div>
-                        <div class="relative z-10">
-                            <div class="text-green-400">// Before FastAsFuck</div>
-                            <div class="text-red-400">function slowOperation(data) {</div>
-                            <div class="text-red-400">  return data.map(x => x * 2); // 847ms</div>
-                            <div class="text-red-400">}</div>
-                            <div class="mt-4 text-green-400">// After FastAsFuck</div>
-                            <div class="text-green-400">import { fast } from 'fastasfuck';</div>
-                            <div class="text-green-400">const fastOperation = fast.optimize(</div>
-                            <div class="text-green-400">  data => data.map(x => x * 2)</div>
-                            <div class="text-green-400">); // 12ms ⚡</div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Our Solution</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Reverse Proxy Shield</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Hide your real server IP and filter all traffic through our protected network</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Intelligent Filtering</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Advanced algorithms detect and block malicious traffic while allowing legitimate players</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Global Network</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Strategic server locations worldwide ensure optimal connection for all players</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -253,300 +286,308 @@
         <!-- Features -->
         <section id="features" class="animate-fade-in">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Features That Matter</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Built for developers who refuse to compromise on performance</p>
+                <h2 class="text-4xl font-bold mb-4">Why Choose FastAsFuck?</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Enterprise-grade protection designed specifically for Minecraft servers</p>
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 1l6 2v7c0 5.55-4.44 10-10 10S0 15.55 0 10V3l6-2z M10 13l-4-4 1.41-1.41L10 10.17l4.59-4.58L16 7l-6 6z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">99.9% Uptime</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Industry-leading uptime guarantee with robust monitoring and failover systems</p>
+                </div>
+                
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
                     <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Lightning Speed</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Up to 100x faster than vanilla JavaScript operations through advanced optimization techniques</p>
+                    <h3 class="text-xl font-bold mb-2">Ultra-Low Latency</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Optimized network routes add less than 10ms latency to your connections</p>
                 </div>
                 
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
                     <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Zero Dependencies</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Pure, self-contained code with no external dependencies. Just raw performance.</p>
+                    <h3 class="text-xl font-bold mb-2">Smart Dashboard</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Real-time monitoring with detailed analytics and attack visualization</p>
                 </div>
                 
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
                     <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Smart Caching</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Intelligent result caching that automatically optimizes for your most common operations</p>
+                    <h3 class="text-xl font-bold mb-2">24/7 Support</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Expert technical support available around the clock when you need help</p>
                 </div>
                 
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
                     <div class="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Auto-Optimization</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Machine learning algorithms that continuously optimize your code based on runtime patterns</p>
-                </div>
-                
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Memory Efficient</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Advanced memory management that prevents leaks and optimizes garbage collection</p>
+                    <h3 class="text-xl font-bold mb-2">Custom MOTD</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Keep players engaged with custom offline messages during maintenance</p>
                 </div>
                 
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
                     <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Production Ready</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Battle-tested in production environments serving millions of requests per day</p>
+                    <h3 class="text-xl font-bold mb-2">Global Network</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Strategic server locations worldwide for optimal player connections</p>
                 </div>
             </div>
         </section>
 
-        <!-- Quick Start -->
-        <section id="quickstart" class="animate-fade-in">
+        <!-- Setup Guide -->
+        <section id="setup" class="animate-fade-in">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Get Started in 30 Seconds</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">From installation to blazing fast performance in half a minute</p>
+                <h2 class="text-4xl font-bold mb-4">Get Protected in Minutes</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Simple setup process to get your server protected fast</p>
             </div>
             
             <div class="space-y-8">
-                <!-- Installation -->
+                <!-- Step 1 -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
                     <h3 class="text-2xl font-bold mb-4 flex items-center">
-                        <span class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">1</span>
-                        Installation
+                        <span class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">1</span>
+                        Contact Our Team
                     </h3>
-                    <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-sm">
-                        <div class="text-green-400"># NPM</div>
-                        <div class="text-white">npm install fastasfuck</div>
-                        <div class="text-green-400 mt-2"># Yarn</div>
-                        <div class="text-white">yarn add fastasfuck</div>
-                        <div class="text-green-400 mt-2"># CDN</div>
-                        <div class="text-white">https://cdn.jsdelivr.net/npm/fastasfuck@latest/dist/fastasfuck.min.js</div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                Reach out to our team through our website contact form. We'll get back to you within 24 hours 
+                                to discuss your server's specific needs and provide a tailored protection solution.
+                            </p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2">What We Need:</h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                    <li>• Server IP address and port</li>
+                                    <li>• Expected player count</li>
+                                    <li>• Current hosting provider</li>
+                                    <li>• Any previous attack history</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <div class="minecraft-block w-32 h-32 rounded-lg flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Basic Usage -->
+                <!-- Step 2 -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
                     <h3 class="text-2xl font-bold mb-4 flex items-center">
-                        <span class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">2</span>
-                        Basic Usage
+                        <span class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">2</span>
+                        DNS Configuration
                     </h3>
-                    <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-sm">
-                        <div class="text-blue-400">import</div> <div class="text-white">{ fast } from</div> <div class="text-green-400">'fastasfuck'</div><div class="text-white">;</div>
-                        <div class="mt-2 text-gray-500">// Optimize any function instantly</div>
-                        <div class="text-blue-400">const</div> <div class="text-white">optimizedFn = fast.optimize(</div>
-                        <div class="text-white ml-4">(data) => data.filter(x => x > 10)</div>
-                        <div class="text-white">);</div>
-                        <div class="mt-2 text-gray-500">// Your function is now 50-100x faster!</div>
-                        <div class="text-blue-400">const</div> <div class="text-white">result = optimizedFn(largeDataset);</div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                We'll provide you with a protected IP address and guide you through updating your DNS records. 
+                                This redirects all traffic through our filtering network while keeping your real server hidden.
+                            </p>
+                            <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 font-mono text-sm">
+                                <div class="text-green-600 dark:text-green-400"># Example DNS Record</div>
+                                <div>play.yourserver.com</div>
+                                <div class="text-blue-600">A → 185.xxx.xxx.xxx</div>
+                                <div class="text-gray-500 text-xs mt-2">Protected IP provided by FastAsFuck</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <div class="minecraft-block w-32 h-32 rounded-lg flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Advanced Example -->
+                <!-- Step 3 -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
                     <h3 class="text-2xl font-bold mb-4 flex items-center">
-                        <span class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">3</span>
-                        Advanced Usage
+                        <span class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">3</span>
+                        You're Protected!
                     </h3>
-                    <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-sm">
-                        <div class="text-blue-400">import</div> <div class="text-white">{ fast, cache, parallel } from</div> <div class="text-green-400">'fastasfuck'</div><div class="text-white">;</div>
-                        <div class="mt-2 text-gray-500">// Combine multiple optimizations</div>
-                        <div class="text-blue-400">const</div> <div class="text-white">superFast = fast</div>
-                        <div class="text-white ml-4">.optimize(expensiveOperation)</div>
-                        <div class="text-white ml-4">.cache({ maxSize: 1000 })</div>
-                        <div class="text-white ml-4">.parallel({ workers: 4 });</div>
-                        
-                        <div class="mt-4 text-gray-500">// Auto-optimization based on usage patterns</div>
-                        <div class="text-blue-400">const</div> <div class="text-white">smartOptimized = fast.auto(</div>
-                        <div class="text-white ml-4">complexDataProcessing,</div>
-                        <div class="text-white ml-4">{ learnFromUsage: true }</div>
-                        <div class="text-white">);</div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                Once DNS propagation is complete (usually within 1-6 hours), your server is fully protected. 
+                                Access your dashboard to monitor traffic, view attack statistics, and customize settings.
+                            </p>
+                            <div class="flex space-x-2">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                    ✓ DDoS Protected
+                                </span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                    ✓ 24/7 Monitoring
+                                </span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                    ✓ Dashboard Access
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <div class="minecraft-block w-32 h-32 rounded-lg flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 1l6 2v7c0 5.55-4.44 10-10 10S0 15.55 0 10V3l6-2z M10 13l-4-4 1.41-1.41L10 10.17l4.59-4.58L16 7l-6 6z"/>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- API Reference -->
-        <section id="api" class="animate-fade-in">
+        <!-- Dashboard -->
+        <section id="dashboard" class="animate-fade-in">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">API Reference</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Simple, powerful API designed for maximum performance</p>
+                <h2 class="text-4xl font-bold mb-4">Intuitive Dashboard</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Monitor your server's protection status and performance in real-time</p>
             </div>
             
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Core Methods -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-2xl font-bold mb-6">Core Methods</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <h4 class="text-lg font-semibold text-blue-600 dark:text-blue-400 font-mono">fast.optimize(fn, options?)</h4>
-                            <p class="text-gray-600 dark:text-gray-400 mt-1">Optimizes any function for maximum performance</p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
-                                <div>fast.optimize(arr => arr.sort())</div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h4 class="text-lg font-semibold text-blue-600 dark:text-blue-400 font-mono">fast.cache(fn, options?)</h4>
-                            <p class="text-gray-600 dark:text-gray-400 mt-1">Adds intelligent result caching to any function</p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
-                                <div>fast.cache(expensiveFn, { maxSize: 100 })</div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h4 class="text-lg font-semibold text-blue-600 dark:text-blue-400 font-mono">fast.parallel(fn, options?)</h4>
-                            <p class="text-gray-600 dark:text-gray-400 mt-1">Distributes work across multiple CPU cores</p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
-                                <div>fast.parallel(heavyComputation, { workers: 4 })</div>
-                            </div>
-                        </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Uptime Metric -->
+                    <div class="text-center p-4 bg-green-50 dark:bg-green-900 rounded-lg">
+                        <div class="text-3xl font-bold text-green-600 dark:text-green-400">99.9%</div>
+                        <div class="text-sm text-green-600 dark:text-green-400">Uptime (24h)</div>
+                        <div class="text-xs text-gray-500 mt-1">99.95% goal</div>
+                    </div>
+                    
+                    <!-- Players Online -->
+                    <div class="text-center p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">247</div>
+                        <div class="text-sm text-blue-600 dark:text-blue-400">Players Online</div>
+                        <div class="text-xs text-gray-500 mt-1">↑ 12% from yesterday</div>
+                    </div>
+                    
+                    <!-- Attacks Blocked -->
+                    <div class="text-center p-4 bg-red-50 dark:bg-red-900 rounded-lg">
+                        <div class="text-3xl font-bold text-red-600 dark:text-red-400">42</div>
+                        <div class="text-sm text-red-600 dark:text-red-400">Attacks Blocked</div>
+                        <div class="text-xs text-gray-500 mt-1">Last 7 days</div>
+                    </div>
+                    
+                    <!-- Latency -->
+                    <div class="text-center p-4 bg-purple-50 dark:bg-purple-900 rounded-lg">
+                        <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">8ms</div>
+                        <div class="text-sm text-purple-600 dark:text-purple-400">Added Latency</div>
+                        <div class="text-xs text-gray-500 mt-1">Average</div>
                     </div>
                 </div>
-
-                <!-- Advanced Methods -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-2xl font-bold mb-6">Advanced Methods</h3>
-                    <div class="space-y-6">
+                
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold">Dashboard Features</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <h4 class="text-lg font-semibold text-purple-600 dark:text-purple-400 font-mono">fast.auto(fn, options?)</h4>
-                            <p class="text-gray-600 dark:text-gray-400 mt-1">Machine learning-based auto-optimization</p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
-                                <div>fast.auto(fn, { learnFromUsage: true })</div>
-                            </div>
+                            <h4 class="font-semibold mb-2">📊 Real-time Analytics</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Track player counts, connection health, and server performance with live graphs and metrics.</p>
                         </div>
-                        
                         <div>
-                            <h4 class="text-lg font-semibold text-purple-600 dark:text-purple-400 font-mono">fast.batch(fns[], options?)</h4>
-                            <p class="text-gray-600 dark:text-gray-400 mt-1">Optimizes multiple functions together</p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
-                                <div>fast.batch([fn1, fn2, fn3])</div>
-                            </div>
+                            <h4 class="font-semibold mb-2">🚨 Attack Monitoring</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">View detailed logs of blocked attacks, traffic patterns, and threat analysis.</p>
                         </div>
-                        
                         <div>
-                            <h4 class="text-lg font-semibold text-purple-600 dark:text-purple-400 font-mono">fast.profile(fn)</h4>
-                            <p class="text-gray-600 dark:text-gray-400 mt-1">Detailed performance profiling and analysis</p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mt-2 font-mono text-sm">
-                                <div>const stats = fast.profile(myFunction)</div>
-                            </div>
+                            <h4 class="font-semibold mb-2">⚙️ Custom Settings</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Configure offline MOTD, kick messages, and protection sensitivity levels.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">📧 Notifications</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Get instant alerts via email or webhook when attacks are detected or blocked.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Benchmarks -->
-        <section id="benchmarks" class="animate-fade-in">
+        <!-- Support -->
+        <section id="support" class="animate-fade-in">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Performance Benchmarks</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Real-world performance comparisons that speak for themselves</p>
+                <h2 class="text-4xl font-bold mb-4">Expert Support</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Our team is here to help you stay protected</p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-8">
-                <!-- Array Processing -->
+                <!-- Contact Form -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-bold mb-6">Array Processing (1M items)</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400">Vanilla JavaScript</span>
-                            <div class="flex items-center">
-                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                                    <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
-                                </div>
-                                <span class="text-red-500 font-mono">847ms</span>
-                            </div>
+                    <h3 class="text-2xl font-bold mb-6">Get In Touch</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Server Domain/IP</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="play.yourserver.com">
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400">Lodash</span>
-                            <div class="flex items-center">
-                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
-                                </div>
-                                <span class="text-yellow-500 font-mono">512ms</span>
-                            </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Expected Players</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                                <option>1-50 players</option>
+                                <option>51-200 players</option>
+                                <option>201-500 players</option>
+                                <option>500+ players</option>
+                            </select>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold gradient-text">FastAsFuck</span>
-                            <div class="flex items-center">
-                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                                    <div class="bg-green-500 h-2 rounded-full" style="width: 2%"></div>
-                                </div>
-                                <span class="text-green-500 font-mono font-bold">12ms ⚡</span>
-                            </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Message</label>
+                            <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Tell us about your server and protection needs..."></textarea>
                         </div>
-                    </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-orange-600 text-white font-medium py-2 px-4 rounded-lg hover:from-red-700 hover:to-orange-700 transition-colors">
+                            Send Message
+                        </button>
+                    </form>
                 </div>
-
-                <!-- Object Manipulation -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-bold mb-6">Object Manipulation (100K objects)</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400">Native Methods</span>
-                            <div class="flex items-center">
-                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                                    <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
-                                </div>
-                                <span class="text-red-500 font-mono">1.2s</span>
+                
+                <!-- Support Info -->
+                <div class="space-y-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                        <h4 class="text-lg font-bold mb-3">Response Times</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Initial Response</span>
+                                <span class="font-semibold">Within 24 hours</span>
                             </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 dark:text-gray-400">Ramda</span>
-                            <div class="flex items-center">
-                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                                    <div class="bg-orange-500 h-2 rounded-full" style="width: 70%"></div>
-                                </div>
-                                <span class="text-orange-500 font-mono">820ms</span>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Technical Support</span>
+                                <span class="font-semibold">24/7 availability</span>
                             </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold gradient-text">FastAsFuck</span>
-                            <div class="flex items-center">
-                                <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                                    <div class="bg-green-500 h-2 rounded-full" style="width: 3%"></div>
-                                </div>
-                                <span class="text-green-500 font-mono font-bold">18ms ⚡</span>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Emergency Issues</span>
+                                <span class="font-semibold">Immediate assistance</span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Performance Summary -->
-            <div class="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-purple-900 rounded-xl p-8 text-center">
-                <h3 class="text-2xl font-bold mb-4">Performance Summary</h3>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div>
-                        <div class="text-4xl font-bold gradient-text mb-2">70x</div>
-                        <div class="text-gray-600 dark:text-gray-400">Average Speed Improvement</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl font-bold gradient-text mb-2">95%</div>
-                        <div class="text-gray-600 dark:text-gray-400">Memory Usage Reduction</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl font-bold gradient-text mb-2">99.9%</div>
-                        <div class="text-gray-600 dark:text-gray-400">CPU Efficiency Gain</div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                        <h4 class="text-lg font-bold mb-3">What Our Customers Say</h4>
+                        <div class="space-y-4">
+                            <blockquote class="border-l-4 border-red-500 pl-4">
+                                <p class="text-gray-600 dark:text-gray-400 italic">"Great performance and perfect customer service! My server has never been more stable."</p>
+                                <footer class="text-sm text-gray-500 mt-2">- Streamer and Owner of Loxxler.de</footer>
+                            </blockquote>
+                            <blockquote class="border-l-4 border-red-500 pl-4">
+                                <p class="text-gray-600 dark:text-gray-400 italic">"Great service and good protection! Haven't experienced any downtime since switching."</p>
+                                <footer class="text-sm text-gray-500 mt-2">- Streamer and Owner of knewstm.de</footer>
+                            </blockquote>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -554,19 +595,19 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-12">
+    <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <div class="text-2xl font-bold gradient-text mb-4">⚡ FastAsFuck</div>
-                <p class="text-gray-600 dark:text-gray-400 mb-6">Making your code blazingly fast, one optimization at a time</p>
-                <div class="flex justify-center space-x-6">
-                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">GitHub</a>
-                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">NPM</a>
-                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Documentation</a>
-                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Discord</a>
+                <div class="text-2xl font-bold gradient-text mb-4">🛡️ FastAsFuck</div>
+                <p class="text-gray-400 mb-6">Ultimate DDoS Protection for Minecraft Servers</p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a>
+                    <a href="#setup" class="text-gray-400 hover:text-white transition-colors">Setup Guide</a>
+                    <a href="#support" class="text-gray-400 hover:text-white transition-colors">Support</a>
+                    <a href="https://fastasfuck.net" class="text-gray-400 hover:text-white transition-colors">Website</a>
                 </div>
-                <div class="mt-6 text-sm text-gray-500 dark:text-gray-500">
-                    © 2025 FastAsFuck. Built for speed. No compromises.
+                <div class="text-sm text-gray-500">
+                    © 2025 FastAsFuck. Protecting Minecraft servers worldwide.
                 </div>
             </div>
         </div>
@@ -577,7 +618,6 @@
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
         
-        // Check for saved theme preference or default to light
         const currentTheme = localStorage.getItem('theme') || 'light';
         if (currentTheme === 'dark') {
             html.classList.add('dark');
@@ -597,7 +637,7 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Smooth Scrolling for Navigation Links
+        // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -607,7 +647,6 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
-                    // Close mobile menu if open
                     mobileMenu.classList.add('hidden');
                 }
             });
@@ -628,7 +667,6 @@
             });
         }, observerOptions);
 
-        // Observe all fade-in elements
         document.querySelectorAll('.animate-fade-in').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
@@ -644,7 +682,6 @@
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
                 if (scrollY >= (sectionTop - 200)) {
                     current = section.getAttribute('id');
                 }
@@ -659,22 +696,6 @@
                 }
             });
         });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // Escape to close mobile menu
-            if (e.key === 'Escape') {
-                mobileMenu.classList.add('hidden');
-            }
-        });
-
-        // Add some interactive performance indicators
-        setInterval(() => {
-            const performanceMeters = document.querySelectorAll('.performance-meter');
-            performanceMeters.forEach(meter => {
-                meter.style.transform = `scaleX(${0.9 + Math.random() * 0.1})`;
-            });
-        }, 2000);
     </script>
 </body>
 </html>
