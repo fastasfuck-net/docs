@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FastAsFuck - Minecraft DDoS Protection Documentation</title>
+    <title>FastAsFuck Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -16,27 +16,6 @@
                             500: '#ef4444',
                             600: '#dc2626',
                             700: '#b91c1c',
-                            900: '#7f1d1d'
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.6s ease-out',
-                        'slide-up': 'slideUp 0.6s ease-out',
-                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'shield-pulse': 'shieldPulse 2s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        shieldPulse: {
-                            '0%, 100%': { transform: 'scale(1)', opacity: '1' },
-                            '50%': { transform: 'scale(1.05)', opacity: '0.8' }
                         }
                     }
                 }
@@ -44,574 +23,848 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
         
-        .gradient-text {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+        body {
+            font-family: 'Inter', sans-serif;
         }
         
-        .glass-effect {
-            backdrop-filter: blur(16px);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
         
-        .dark .glass-effect {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .prose {
+            max-width: none;
         }
         
-        .minecraft-block {
-            background: linear-gradient(45deg, #8B4513 0%, #A0522D 25%, #8B4513 50%, #A0522D 75%, #8B4513 100%);
-            background-size: 20px 20px;
+        .prose h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
         }
         
-        .shield-glow {
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        .prose h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            margin-top: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .dark .prose h2 {
+            border-bottom-color: #374151;
+        }
+        
+        .prose h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .prose h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .prose p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        
+        .prose ul, .prose ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .prose li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-link:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+        
+        .sidebar-link.active {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border-right: 3px solid #dc2626;
+        }
+        
+        .code-block {
+            background: #1f2937;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .toc {
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        
+        .search-highlight {
+            background-color: #fef3c7;
+            padding: 0 0.25rem;
+            border-radius: 0.25rem;
+        }
+        
+        .dark .search-highlight {
+            background-color: #451a03;
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-sans transition-colors duration-300">
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-effect">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <div class="text-2xl font-bold gradient-text">🛡️ FastAsFuck</div>
-                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">DDoS Protection</span>
-                </div>
-                
-                <!-- Desktop Navigation -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Introduction</a>
-                        <a href="#features" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Features</a>
-                        <a href="#setup" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Setup Guide</a>
-                        <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Dashboard</a>
-                        <a href="#support" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Support</a>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="fixed left-0 top-0 w-80 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto z-50">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 1l6 2v7c0 5.55-4.44 10-10 10S0 15.55 0 10V3l6-2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg">FastAsFuck</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Documentation</p>
                     </div>
                 </div>
                 
-                <!-- Theme Toggle & Mobile Menu -->
-                <div class="flex items-center space-x-4">
-                    <button id="theme-toggle" class="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
-                        </svg>
-                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                        </svg>
-                    </button>
-                    
-                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md text-gray-700 dark:text-gray-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
+                <!-- Search -->
+                <div class="mt-4 relative">
+                    <input type="text" id="search-input" placeholder="Search documentation..." 
+                           class="w-full px-3 py-2 pl-10 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <svg class="w-4 h-4 absolute left-3 top-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
+                    </svg>
                 </div>
+                
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="mt-3 w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="dark:hidden">🌙 Dark Mode</span>
+                    <span class="hidden dark:inline">☀️ Light Mode</span>
+                </button>
             </div>
-        </div>
+            
+            <!-- Navigation -->
+            <nav class="p-4">
+                <div class="space-y-1">
+                    <!-- Getting Started -->
+                    <div class="mb-4">
+                        <h3 class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Getting Started</h3>
+                        <a href="#overview" class="sidebar-link block px-3 py-2 text-sm rounded-md">Overview</a>
+                        <a href="#prerequisites" class="sidebar-link block px-3 py-2 text-sm rounded-md">Prerequisites</a>
+                        <a href="#quick-setup" class="sidebar-link block px-3 py-2 text-sm rounded-md">Quick Setup</a>
+                    </div>
+                    
+                    <!-- Configuration -->
+                    <div class="mb-4">
+                        <h3 class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Configuration</h3>
+                        <a href="#dns-setup" class="sidebar-link block px-3 py-2 text-sm rounded-md">DNS Setup</a>
+                        <a href="#server-config" class="sidebar-link block px-3 py-2 text-sm rounded-md">Server Configuration</a>
+                        <a href="#firewall-rules" class="sidebar-link block px-3 py-2 text-sm rounded-md">Firewall Rules</a>
+                        <a href="#custom-motd" class="sidebar-link block px-3 py-2 text-sm rounded-md">Custom MOTD</a>
+                    </div>
+                    
+                    <!-- Dashboard -->
+                    <div class="mb-4">
+                        <h3 class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dashboard</h3>
+                        <a href="#monitoring" class="sidebar-link block px-3 py-2 text-sm rounded-md">Monitoring</a>
+                        <a href="#attack-logs" class="sidebar-link block px-3 py-2 text-sm rounded-md">Attack Logs</a>
+                        <a href="#analytics" class="sidebar-link block px-3 py-2 text-sm rounded-md">Analytics</a>
+                        <a href="#notifications" class="sidebar-link block px-3 py-2 text-sm rounded-md">Notifications</a>
+                    </div>
+                    
+                    <!-- API Reference -->
+                    <div class="mb-4">
+                        <h3 class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">API Reference</h3>
+                        <a href="#authentication" class="sidebar-link block px-3 py-2 text-sm rounded-md">Authentication</a>
+                        <a href="#endpoints" class="sidebar-link block px-3 py-2 text-sm rounded-md">Endpoints</a>
+                        <a href="#webhooks" class="sidebar-link block px-3 py-2 text-sm rounded-md">Webhooks</a>
+                        <a href="#rate-limits" class="sidebar-link block px-3 py-2 text-sm rounded-md">Rate Limits</a>
+                    </div>
+                    
+                    <!-- Troubleshooting -->
+                    <div class="mb-4">
+                        <h3 class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Troubleshooting</h3>
+                        <a href="#common-issues" class="sidebar-link block px-3 py-2 text-sm rounded-md">Common Issues</a>
+                        <a href="#diagnostics" class="sidebar-link block px-3 py-2 text-sm rounded-md">Diagnostics</a>
+                        <a href="#support" class="sidebar-link block px-3 py-2 text-sm rounded-md">Support</a>
+                    </div>
+                    
+                    <!-- Advanced -->
+                    <div class="mb-4">
+                        <h3 class="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Advanced</h3>
+                        <a href="#custom-rules" class="sidebar-link block px-3 py-2 text-sm rounded-md">Custom Rules</a>
+                        <a href="#network-config" class="sidebar-link block px-3 py-2 text-sm rounded-md">Network Configuration</a>
+                        <a href="#migration" class="sidebar-link block px-3 py-2 text-sm rounded-md">Migration Guide</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
         
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 glass-effect">
-                <a href="#intro" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Introduction</a>
-                <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Features</a>
-                <a href="#setup" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Setup Guide</a>
-                <a href="#dashboard" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Dashboard</a>
-                <a href="#support" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Support</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-red-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-900 dark:to-red-900">
-        <!-- Animated Background -->
-        <div class="absolute inset-0 opacity-20">
-            <div class="absolute top-10 left-10 w-72 h-72 bg-red-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast"></div>
-            <div class="absolute top-40 right-10 w-72 h-72 bg-orange-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 1s"></div>
-            <div class="absolute bottom-20 left-20 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse-fast" style="animation-delay: 2s"></div>
-        </div>
-        
-        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-            <div class="animate-fade-in">
-                <!-- Shield Icon -->
-                <div class="mb-8 flex justify-center">
-                    <div class="w-24 h-24 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shield-glow animate-shield-pulse">
-                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 1l6 2v7c0 5.55-4.44 10-10 10S0 15.55 0 10V3l6-2z M10 13l-4-4 1.41-1.41L10 10.17l4.59-4.58L16 7l-6 6z"/>
-                        </svg>
-                    </div>
-                </div>
-                
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
-                    <span class="gradient-text">Fast</span>
-                    <span class="text-gray-900 dark:text-white">As</span>
-                    <span class="gradient-text">Fuck</span>
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto">
-                    Ultimate <strong>Reverse Proxy & DDoS Protection</strong> for Minecraft Servers. 
-                    Stay online 24/7 with blazing fast connections and bulletproof security.
-                </p>
-                
-                <!-- Status Indicators -->
-                <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-                        <div class="text-2xl font-bold text-green-500">99.9%</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Uptime</div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-                        <div class="text-2xl font-bold text-blue-500">&lt;10ms</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Added Latency</div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-                        <div class="text-2xl font-bold text-purple-500">24/7</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">Monitoring</div>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="#setup" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                        Get Protected Now
-                        <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </a>
-                    <a href="#features" class="inline-flex items-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-lg font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
-                        Learn More
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
-        
-        <!-- Introduction -->
-        <section id="intro" class="animate-fade-in">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Why Your Minecraft Server Needs Protection</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                    DDoS attacks can destroy your server's reputation, frustrate players, and cost you money. 
-                    FastAsFuck provides enterprise-grade protection that keeps you online when others go down.
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h3 class="text-2xl font-bold mb-6">The Problem</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Server Crashes</h4>
-                                <p class="text-gray-600 dark:text-gray-400">DDoS attacks overwhelm your server, causing crashes and disconnecting all players</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Lost Revenue</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Server downtime means lost donations, rank sales, and frustrated players leaving</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Reputation Damage</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Unreliable servers lose player trust and struggle to grow their community</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <h3 class="text-2xl font-bold mb-6">Our Solution</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Reverse Proxy Shield</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Hide your real server IP and filter all traffic through our protected network</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Intelligent Filtering</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Advanced algorithms detect and block malicious traffic while allowing legitimate players</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Global Network</h4>
-                                <p class="text-gray-600 dark:text-gray-400">Strategic server locations worldwide ensure optimal connection for all players</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features -->
-        <section id="features" class="animate-fade-in">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Why Choose FastAsFuck?</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Enterprise-grade protection designed specifically for Minecraft servers</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 1l6 2v7c0 5.55-4.44 10-10 10S0 15.55 0 10V3l6-2z M10 13l-4-4 1.41-1.41L10 10.17l4.59-4.58L16 7l-6 6z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">99.9% Uptime</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Industry-leading uptime guarantee with robust monitoring and failover systems</p>
-                </div>
-                
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Ultra-Low Latency</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Optimized network routes add less than 10ms latency to your connections</p>
-                </div>
-                
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Smart Dashboard</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Real-time monitoring with detailed analytics and attack visualization</p>
-                </div>
-                
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">24/7 Support</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Expert technical support available around the clock when you need help</p>
-                </div>
-                
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Custom MOTD</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Keep players engaged with custom offline messages during maintenance</p>
-                </div>
-                
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                    <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Global Network</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Strategic server locations worldwide for optimal player connections</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Setup Guide -->
-        <section id="setup" class="animate-fade-in">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Get Protected in Minutes</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Simple setup process to get your server protected fast</p>
-            </div>
-            
-            <div class="space-y-8">
-                <!-- Step 1 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center">
-                        <span class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">1</span>
-                        Contact Our Team
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                Reach out to our team through our website contact form. We'll get back to you within 24 hours 
-                                to discuss your server's specific needs and provide a tailored protection solution.
+        <!-- Main Content -->
+        <main class="flex-1 ml-80">
+            <div class="flex">
+                <!-- Content -->
+                <div class="flex-1 max-w-4xl p-8">
+                    <div class="prose">
+                        <!-- Overview -->
+                        <section id="overview">
+                            <h1>FastAsFuck Documentation</h1>
+                            <p class="text-xl text-gray-600 dark:text-gray-400">
+                                Ultimate reverse proxy and DDoS protection service for Minecraft servers. 
+                                This documentation will guide you through setup, configuration, and advanced features.
                             </p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                                <h4 class="font-semibold mb-2">What We Need:</h4>
-                                <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                    <li>• Server IP address and port</li>
-                                    <li>• Expected player count</li>
-                                    <li>• Current hosting provider</li>
-                                    <li>• Any previous attack history</li>
-                                </ul>
+                            
+                            <div class="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4 my-6">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                                    </svg>
+                                    <strong class="text-blue-700 dark:text-blue-300">Info:</strong>
+                                </div>
+                                <p class="mt-2 text-blue-700 dark:text-blue-300 mb-0">
+                                    FastAsFuck provides enterprise-grade DDoS protection with minimal latency impact (&lt;10ms) and 99.9% uptime guarantee.
+                                </p>
                             </div>
-                        </div>
-                        <div class="flex items-center justify-center">
-                            <div class="minecraft-block w-32 h-32 rounded-lg flex items-center justify-center">
-                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                </svg>
+                            
+                            <h3>Key Features</h3>
+                            <ul>
+                                <li><strong>Reverse Proxy Protection</strong> - Hide your real server IP</li>
+                                <li><strong>DDoS Mitigation</strong> - Block Layer 3/4/7 attacks automatically</li>
+                                <li><strong>Global Network</strong> - Multiple edge locations worldwide</li>
+                                <li><strong>Real-time Monitoring</strong> - 24/7 attack detection and blocking</li>
+                                <li><strong>Custom MOTD</strong> - Maintain player engagement during downtime</li>
+                                <li><strong>Analytics Dashboard</strong> - Detailed traffic and attack statistics</li>
+                                <li><strong>API Access</strong> - Programmatic control and monitoring</li>
+                            </ul>
+                        </section>
+                        
+                        <!-- Prerequisites -->
+                        <section id="prerequisites">
+                            <h2>Prerequisites</h2>
+                            <p>Before setting up FastAsFuck protection, ensure you have:</p>
+                            
+                            <h3>Server Requirements</h3>
+                            <ul>
+                                <li>Minecraft server running on a dedicated server or VPS</li>
+                                <li>Root/administrator access to your server</li>
+                                <li>Static IP address for your server</li>
+                                <li>Domain name with DNS management access</li>
+                            </ul>
+                            
+                            <h3>Supported Versions</h3>
+                            <ul>
+                                <li>Minecraft Java Edition (all versions)</li>
+                                <li>Minecraft Bedrock Edition</li>
+                                <li>Paper, Spigot, Bukkit, Forge, Fabric servers</li>
+                                <li>Proxy servers (BungeeCord, Waterfall, Velocity)</li>
+                            </ul>
+                            
+                            <div class="bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4 my-6">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/>
+                                    </svg>
+                                    <strong class="text-yellow-700 dark:text-yellow-300">Warning:</strong>
+                                </div>
+                                <p class="mt-2 text-yellow-700 dark:text-yellow-300 mb-0">
+                                    Shared hosting services are not supported. You need full control over your server configuration.
+                                </p>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </section>
+                        
+                        <!-- Quick Setup -->
+                        <section id="quick-setup">
+                            <h2>Quick Setup</h2>
+                            <p>Get your server protected in under 30 minutes with this step-by-step guide.</p>
+                            
+                            <h3>Step 1: Contact FastAsFuck Team</h3>
+                            <p>Reach out through our contact form with the following information:</p>
+                            <ul>
+                                <li>Server IP address and port</li>
+                                <li>Domain name you want to protect</li>
+                                <li>Expected concurrent players</li>
+                                <li>Current hosting provider</li>
+                            </ul>
+                            
+                            <h3>Step 2: Receive Protection Details</h3>
+                            <p>Within 24 hours, you'll receive:</p>
+                            <ul>
+                                <li>Protected IP address</li>
+                                <li>DNS configuration instructions</li>
+                                <li>Dashboard access credentials</li>
+                                <li>Configuration checklist</li>
+                            </ul>
+                            
+                            <h3>Step 3: Update DNS Records</h3>
+                            <p>Update your domain's DNS records to point to the protected IP:</p>
+                            
+                            <div class="code-block" data-lang="dns">
+<code class="text-green-400"># Before (example)
+play.yourserver.com    A    203.0.113.10
 
-                <!-- Step 2 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center">
-                        <span class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">2</span>
-                        DNS Configuration
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                We'll provide you with a protected IP address and guide you through updating your DNS records. 
-                                This redirects all traffic through our filtering network while keeping your real server hidden.
-                            </p>
-                            <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 font-mono text-sm">
-                                <div class="text-green-600 dark:text-green-400"># Example DNS Record</div>
-                                <div>play.yourserver.com</div>
-                                <div class="text-blue-600">A → 185.xxx.xxx.xxx</div>
-                                <div class="text-gray-500 text-xs mt-2">Protected IP provided by FastAsFuck</div>
+# After
+play.yourserver.com    A    185.xxx.xxx.xxx  # Protected IP provided by FastAsFuck</code>
                             </div>
-                        </div>
-                        <div class="flex items-center justify-center">
-                            <div class="minecraft-block w-32 h-32 rounded-lg flex items-center justify-center">
-                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            
+                            <h3>Step 4: Verify Protection</h3>
+                            <p>Once DNS propagates (1-6 hours), verify protection is active:</p>
+                            <ul>
+                                <li>Connect to your server using the domain</li>
+                                <li>Check dashboard for incoming traffic</li>
+                                <li>Test server responsiveness</li>
+                            </ul>
+                        </section>
+                        
+                        <!-- DNS Setup -->
+                        <section id="dns-setup">
+                            <h2>DNS Setup</h2>
+                            <p>Detailed DNS configuration for various providers and scenarios.</p>
+                            
+                            <h3>Standard A Record Setup</h3>
+                            <p>For most Minecraft servers, you'll configure a simple A record:</p>
+                            
+                            <div class="code-block" data-lang="dns">
+<code class="text-blue-400"># Main server record
+play.yourserver.com    A    185.xxx.xxx.xxx
 
-                <!-- Step 3 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center">
-                        <span class="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">3</span>
-                        You're Protected!
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <p class="text-gray-600 dark:text-gray-400 mb-4">
-                                Once DNS propagation is complete (usually within 1-6 hours), your server is fully protected. 
-                                Access your dashboard to monitor traffic, view attack statistics, and customize settings.
-                            </p>
-                            <div class="flex space-x-2">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                    ✓ DDoS Protected
-                                </span>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                    ✓ 24/7 Monitoring
-                                </span>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                    ✓ Dashboard Access
-                                </span>
+# Optional subdomain records
+lobby.yourserver.com   A    185.xxx.xxx.xxx
+creative.yourserver.com A   185.xxx.xxx.xxx</code>
                             </div>
-                        </div>
-                        <div class="flex items-center justify-center">
-                            <div class="minecraft-block w-32 h-32 rounded-lg flex items-center justify-center">
-                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 1l6 2v7c0 5.55-4.44 10-10 10S0 15.55 0 10V3l6-2z M10 13l-4-4 1.41-1.41L10 10.17l4.59-4.58L16 7l-6 6z"/>
-                                </svg>
+                            
+                            <h3>SRV Record Configuration</h3>
+                            <p>If using non-standard ports, configure SRV records:</p>
+                            
+                            <div class="code-block" data-lang="dns">
+<code class="text-purple-400"># SRV record format: _service._protocol.name TTL class SRV priority weight port target
+_minecraft._tcp.play.yourserver.com    SRV    0 5 25565 protected.fastasfuck.net</code>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                            
+                            <h3>Provider-Specific Instructions</h3>
+                            
+                            <h4>Cloudflare</h4>
+                            <ol>
+                                <li>Log into Cloudflare Dashboard</li>
+                                <li>Select your domain</li>
+                                <li>Go to DNS settings</li>
+                                <li>Add/Edit A record with protected IP</li>
+                                <li><strong>Important:</strong> Set proxy status to "DNS only" (grey cloud)</li>
+                            </ol>
+                            
+                            <div class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4 my-6">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+                                    </svg>
+                                    <strong class="text-red-700 dark:text-red-300">Critical:</strong>
+                                </div>
+                                <p class="mt-2 text-red-700 dark:text-red-300 mb-0">
+                                    Never enable Cloudflare proxy (orange cloud) for Minecraft records. It will break connections.
+                                </p>
+                            </div>
+                            
+                            <h4>Namecheap</h4>
+                            <ol>
+                                <li>Login to Namecheap account</li>
+                                <li>Go to Domain List</li>
+                                <li>Click "Manage" next to your domain</li>
+                                <li>Go to "Advanced DNS" tab</li>
+                                <li>Add/modify A record with protected IP</li>
+                            </ol>
+                        </section>
+                        
+                        <!-- Server Configuration -->
+                        <section id="server-config">
+                            <h2>Server Configuration</h2>
+                            <p>Configure your Minecraft server to work optimally with FastAsFuck protection.</p>
+                            
+                            <h3>Server Properties</h3>
+                            <p>Update your <code>server.properties</code> file:</p>
+                            
+                            <div class="code-block" data-lang="properties">
+<code class="text-green-400"># Bind to all interfaces to accept proxied connections
+server-ip=0.0.0.0
+server-port=25565
 
-        <!-- Dashboard -->
-        <section id="dashboard" class="animate-fade-in">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Intuitive Dashboard</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Monitor your server's protection status and performance in real-time</p>
-            </div>
-            
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <!-- Uptime Metric -->
-                    <div class="text-center p-4 bg-green-50 dark:bg-green-900 rounded-lg">
-                        <div class="text-3xl font-bold text-green-600 dark:text-green-400">99.9%</div>
-                        <div class="text-sm text-green-600 dark:text-green-400">Uptime (24h)</div>
-                        <div class="text-xs text-gray-500 mt-1">99.95% goal</div>
-                    </div>
-                    
-                    <!-- Players Online -->
-                    <div class="text-center p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">247</div>
-                        <div class="text-sm text-blue-600 dark:text-blue-400">Players Online</div>
-                        <div class="text-xs text-gray-500 mt-1">↑ 12% from yesterday</div>
-                    </div>
-                    
-                    <!-- Attacks Blocked -->
-                    <div class="text-center p-4 bg-red-50 dark:bg-red-900 rounded-lg">
-                        <div class="text-3xl font-bold text-red-600 dark:text-red-400">42</div>
-                        <div class="text-sm text-red-600 dark:text-red-400">Attacks Blocked</div>
-                        <div class="text-xs text-gray-500 mt-1">Last 7 days</div>
-                    </div>
-                    
-                    <!-- Latency -->
-                    <div class="text-center p-4 bg-purple-50 dark:bg-purple-900 rounded-lg">
-                        <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">8ms</div>
-                        <div class="text-sm text-purple-600 dark:text-purple-400">Added Latency</div>
-                        <div class="text-xs text-gray-500 mt-1">Average</div>
+# Enable white-list for additional security
+white-list=true
+enforce-whitelist=true
+
+# Query settings for monitoring
+enable-query=true
+query.port=25565</code>
+                            </div>
+                            
+                            <h3>IP Forwarding (BungeeCord/Velocity)</h3>
+                            <p>For proxy setups, enable IP forwarding to preserve real player IPs:</p>
+                            
+                            <div class="code-block" data-lang="yaml">
+<code class="text-blue-400"># BungeeCord config.yml
+ip_forward: true
+prevent_proxy_connections: false
+
+# Spigot/Paper spigot.yml
+settings:
+  bungeecord: true</code>
+                            </div>
+                            
+                            <h3>Firewall Configuration</h3>
+                            <p>Configure server firewall to only accept connections from FastAsFuck IPs:</p>
+                            
+                            <div class="code-block" data-lang="bash">
+<code class="text-yellow-400"># UFW (Ubuntu)
+sudo ufw deny 25565
+sudo ufw allow from 185.xxx.xxx.0/24 to any port 25565
+
+# iptables
+iptables -A INPUT -p tcp --dport 25565 -s 185.xxx.xxx.0/24 -j ACCEPT
+iptables -A INPUT -p tcp --dport 25565 -j DROP</code>
+                            </div>
+                        </section>
+                        
+                        <!-- Custom MOTD -->
+                        <section id="custom-motd">
+                            <h2>Custom MOTD</h2>
+                            <p>Configure custom offline messages to maintain player engagement during maintenance or attacks.</p>
+                            
+                            <h3>Dashboard Configuration</h3>
+                            <p>Configure your offline MOTD through the dashboard:</p>
+                            <ol>
+                                <li>Login to your FastAsFuck dashboard</li>
+                                <li>Navigate to "Server Settings"</li>
+                                <li>Find "Offline MOTD" section</li>
+                                <li>Customize message, colors, and player count</li>
+                            </ol>
+                            
+                            <h3>MOTD Formatting</h3>
+                            <p>Use Minecraft color codes and formatting:</p>
+                            
+                            <div class="code-block" data-lang="text">
+<code class="text-green-400"># Color codes
+&0 = Black        &8 = Dark Gray
+&1 = Dark Blue    &9 = Blue
+&2 = Dark Green   &a = Green
+&3 = Dark Aqua    &b = Aqua
+&4 = Dark Red     &c = Red
+&5 = Dark Purple  &d = Light Purple
+&6 = Gold         &e = Yellow
+&7 = Gray         &f = White
+
+# Formatting codes
+&l = Bold         &o = Italic
+&n = Underline    &m = Strikethrough
+&k = Obfuscated   &r = Reset</code>
+                            </div>
+                            
+                            <h3>Example MOTD</h3>
+                            <div class="code-block" data-lang="text">
+<code class="text-blue-400">&c&l⚡ &f&lMyServer &c&l⚡
+&7Protected by &c&lFastAsFuck
+&a✓ &fOnline &8| &e⚠ &fMaintenance
+&7Join our Discord: &bdiscord.gg/server</code>
+                            </div>
+                        </section>
+                        
+                        <!-- Monitoring -->
+                        <section id="monitoring">
+                            <h2>Monitoring</h2>
+                            <p>Real-time monitoring and analytics for your protected server.</p>
+                            
+                            <h3>Dashboard Overview</h3>
+                            <p>The dashboard provides comprehensive monitoring:</p>
+                            <ul>
+                                <li><strong>Server Status</strong> - Real-time online/offline status</li>
+                                <li><strong>Player Count</strong> - Current and historical player counts</li>
+                                <li><strong>Traffic Analytics</strong> - Bandwidth usage and connection stats</li>
+                                <li><strong>Attack Detection</strong> - Real-time attack monitoring and blocking</li>
+                                <li><strong>Latency Metrics</strong> - Network performance statistics</li>
+                            </ul>
+                            
+                            <h3>Key Metrics</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <div class="text-2xl font-bold text-green-500">99.9%</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Uptime (30d)</div>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <div class="text-2xl font-bold text-blue-500">8ms</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Avg Latency</div>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <div class="text-2xl font-bold text-purple-500">247</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Players Online</div>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <div class="text-2xl font-bold text-red-500">42</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Attacks Blocked</div>
+                                </div>
+                            </div>
+                            
+                            <h3>Alert Thresholds</h3>
+                            <p>Configure custom alerts for important events:</p>
+                            <ul>
+                                <li>Server downtime exceeding 30 seconds</li>
+                                <li>DDoS attacks detected and blocked</li>
+                                <li>Unusual traffic patterns</li>
+                                <li>High latency spikes (&gt;50ms)</li>
+                                <li>Player count milestones</li>
+                            </ul>
+                        </section>
+                        
+                        <!-- API Reference -->
+                        <section id="authentication">
+                            <h2>API Authentication</h2>
+                            <p>Secure API access using token-based authentication.</p>
+                            
+                            <h3>Getting Your API Key</h3>
+                            <ol>
+                                <li>Login to your FastAsFuck dashboard</li>
+                                <li>Navigate to "API Settings"</li>
+                                <li>Click "Generate New Token"</li>
+                                <li>Copy and securely store your API key</li>
+                            </ol>
+                            
+                            <h3>Authentication Headers</h3>
+                            <p>Include your API key in all requests:</p>
+                            
+                            <div class="code-block" data-lang="http">
+<code class="text-green-400">GET /api/v1/server/status HTTP/1.1
+Host: api.fastasfuck.net
+Authorization: Bearer your_api_key_here
+Content-Type: application/json</code>
+                            </div>
+                            
+                            <h3>Rate Limits</h3>
+                            <ul>
+                                <li><strong>Standard API:</strong> 100 requests per minute</li>
+                                <li><strong>Monitoring endpoints:</strong> 300 requests per minute</li>
+                                <li><strong>Bulk operations:</strong> 10 requests per minute</li>
+                            </ul>
+                        </section>
+                        
+                        <!-- Endpoints -->
+                        <section id="endpoints">
+                            <h2>API Endpoints</h2>
+                            <p>Complete reference for all available API endpoints.</p>
+                            
+                            <h3>Server Status</h3>
+                            
+                            <h4>GET /api/v1/server/status</h4>
+                            <p>Get current server status and statistics.</p>
+                            
+                            <div class="code-block" data-lang="bash">
+<code class="text-yellow-400">curl -X GET "https://api.fastasfuck.net/api/v1/server/status" \
+  -H "Authorization: Bearer YOUR_API_KEY"</code>
+                            </div>
+                            
+                            <p><strong>Response:</strong></p>
+                            <div class="code-block" data-lang="json">
+<code class="text-blue-400">{
+  "status": "online",
+  "players": {
+    "online": 247,
+    "max": 500
+  },
+  "latency": 8,
+  "uptime": 99.95,
+  "last_updated": "2025-01-15T10:30:00Z"
+}</code>
+                            </div>
+                            
+                            <h3>Attack Logs</h3>
+                            
+                            <h4>GET /api/v1/attacks</h4>
+                            <p>Retrieve recent attack logs and statistics.</p>
+                            
+                            <div class="code-block" data-lang="bash">
+<code class="text-yellow-400">curl -X GET "https://api.fastasfuck.net/api/v1/attacks?limit=10" \
+  -H "Authorization: Bearer YOUR_API_KEY"</code>
+                            </div>
+                            
+                            <p><strong>Response:</strong></p>
+                            <div class="code-block" data-lang="json">
+<code class="text-blue-400">{
+  "attacks": [
+    {
+      "id": "att_1234567890",
+      "timestamp": "2025-01-15T09:15:00Z",
+      "type": "UDP_FLOOD",
+      "duration": 120,
+      "peak_pps": 50000,
+      "blocked": true,
+      "source_countries": ["CN", "RU", "BR"]
+    }
+  ],
+  "total": 42,
+  "blocked": 42,
+  "success_rate": 100.0
+}</code>
+                            </div>
+                            
+                            <h3>Configuration</h3>
+                            
+                            <h4>PUT /api/v1/server/config</h4>
+                            <p>Update server configuration settings.</p>
+                            
+                            <div class="code-block" data-lang="bash">
+<code class="text-yellow-400">curl -X PUT "https://api.fastasfuck.net/api/v1/server/config" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "offline_motd": "&c&lServer Under Maintenance\n&7Protected by FastAsFuck",
+    "max_players_displayed": 500,
+    "enable_notifications": true
+  }'</code>
+                            </div>
+                        </section>
+                        
+                        <!-- Troubleshooting -->
+                        <section id="common-issues">
+                            <h2>Common Issues</h2>
+                            <p>Solutions to frequently encountered problems.</p>
+                            
+                            <h3>Connection Issues</h3>
+                            
+                            <h4>Problem: Players can't connect to server</h4>
+                            <p><strong>Possible causes:</strong></p>
+                            <ul>
+                                <li>DNS not fully propagated</li>
+                                <li>Firewall blocking FastAsFuck IPs</li>
+                                <li>Server not bound to correct interface</li>
+                            </ul>
+                            
+                            <p><strong>Solutions:</strong></p>
+                            <ol>
+                                <li>Check DNS propagation: <code>nslookup play.yourserver.com</code></li>
+                                <li>Verify firewall rules allow FastAsFuck IP ranges</li>
+                                <li>Ensure <code>server-ip=0.0.0.0</code> in server.properties</li>
+                                <li>Test direct IP connection to verify server is running</li>
+                            </ol>
+                            
+                            <h4>Problem: High latency/lag</h4>
+                            <p><strong>Diagnostic steps:</strong></p>
+                            <ol>
+                                <li>Check dashboard for added latency metrics</li>
+                                <li>Test direct server connection vs. protected connection</li>
+                                <li>Review server resource usage (CPU, RAM, disk)</li>
+                                <li>Check for active DDoS attacks in dashboard</li>
+                            </ol>
+                            
+                            <h3>Dashboard Issues</h3>
+                            
+                            <h4>Problem: Dashboard shows server offline</h4>
+                            <p><strong>Check these items:</strong></p>
+                            <ul>
+                                <li>Server is actually running and accessible</li>
+                                <li>Query is enabled in server.properties</li>
+                                <li>No firewall blocking monitoring connections</li>
+                                <li>Server responding to ping/query requests</li>
+                            </ul>
+                            
+                            <h3>Getting Help</h3>
+                            <p>If you can't resolve the issue:</p>
+                            <ol>
+                                <li>Check the <a href="#diagnostics" class="text-red-500 hover:text-red-600">diagnostics section</a></li>
+                                <li>Gather relevant logs and error messages</li>
+                                <li>Contact support with detailed problem description</li>
+                                <li>Include server details and steps already attempted</li>
+                            </ol>
+                        </section>
+                        
+                        <!-- Diagnostics -->
+                        <section id="diagnostics">
+                            <h2>Diagnostics</h2>
+                            <p>Tools and commands to diagnose and resolve issues.</p>
+                            
+                            <h3>Network Diagnostics</h3>
+                            
+                            <h4>DNS Verification</h4>
+                            <div class="code-block" data-lang="bash">
+<code class="text-green-400"># Check DNS resolution
+nslookup play.yourserver.com
+dig play.yourserver.com
+
+# Check from different locations
+nslookup play.yourserver.com 8.8.8.8
+nslookup play.yourserver.com 1.1.1.1</code>
+                            </div>
+                            
+                            <h4>Connection Testing</h4>
+                            <div class="code-block" data-lang="bash">
+<code class="text-blue-400"># Test Minecraft server connectivity
+telnet play.yourserver.com 25565
+nc -zv play.yourserver.com 25565
+
+# Test with timeout
+timeout 5 telnet play.yourserver.com 25565</code>
+                            </div>
+                            
+                            <h4>Latency Testing</h4>
+                            <div class="code-block" data-lang="bash">
+<code class="text-purple-400"># Ping test
+ping -c 10 play.yourserver.com
+
+# Traceroute to identify routing issues
+traceroute play.yourserver.com
+mtr play.yourserver.com</code>
+                            </div>
+                            
+                            <h3>Server Diagnostics</h3>
+                            
+                            <h4>Log Analysis</h4>
+                            <div class="code-block" data-lang="bash">
+<code class="text-yellow-400"># Check server logs for connection errors
+tail -f logs/latest.log | grep -i error
+tail -f logs/latest.log | grep -i "can't keep up"
+
+# Monitor connections
+netstat -an | grep :25565
+ss -tuln | grep :25565</code>
+                            </div>
+                            
+                            <h4>Resource Monitoring</h4>
+                            <div class="code-block" data-lang="bash">
+<code class="text-red-400"># Check system resources
+top -p $(pidof java)
+htop -p $(pidof java)
+
+# Memory usage
+free -h
+cat /proc/meminfo | grep -i available
+
+# Disk usage
+df -h
+iotop</code>
+                            </div>
+                            
+                            <h3>FastAsFuck Specific</h3>
+                            
+                            <h4>API Health Check</h4>
+                            <div class="code-block" data-lang="bash">
+<code class="text-green-400"># Test API connectivity
+curl -I https://api.fastasfuck.net/health
+
+# Verify authentication
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+     https://api.fastasfuck.net/api/v1/server/status</code>
+                            </div>
+                            
+                            <h4>Dashboard Connectivity</h4>
+                            <p>If dashboard shows incorrect information:</p>
+                            <ol>
+                                <li>Verify server query settings are enabled</li>
+                                <li>Check firewall allows monitoring connections</li>
+                                <li>Test query response manually</li>
+                                <li>Review any error messages in dashboard</li>
+                            </ol>
+                        </section>
+                        
+                        <!-- Support -->
+                        <section id="support">
+                            <h2>Support</h2>
+                            <p>Get help when you need it most.</p>
+                            
+                            <h3>Contact Methods</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <h4 class="font-bold mb-2">🎫 Support Tickets</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">For technical issues and configuration help</p>
+                                    <p class="text-sm"><strong>Response time:</strong> &lt; 24 hours</p>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <h4 class="font-bold mb-2">🚨 Emergency Support</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">For active attacks and critical issues</p>
+                                    <p class="text-sm"><strong>Response time:</strong> Immediate</p>
+                                </div>
+                            </div>
+                            
+                            <h3>Before Contacting Support</h3>
+                            <p>To help us assist you faster, please:</p>
+                            <ol>
+                                <li>Check this documentation for solutions</li>
+                                <li>Review the <a href="#common-issues" class="text-red-500 hover:text-red-600">common issues section</a></li>
+                                <li>Run basic <a href="#diagnostics" class="text-red-500 hover:text-red-600">diagnostics</a></li>
+                                <li>Gather relevant error messages and logs</li>
+                            </ol>
+                            
+                            <h3>Information to Include</h3>
+                            <p>When opening a support ticket, please provide:</p>
+                            <ul>
+                                <li><strong>Server details:</strong> Domain, IP, Minecraft version</li>
+                                <li><strong>Problem description:</strong> What's happening vs. expected behavior</li>
+                                <li><strong>Timeline:</strong> When did the issue start?</li>
+                                <li><strong>Error messages:</strong> Exact error text from logs/console</li>
+                                <li><strong>Steps taken:</strong> What you've already tried</li>
+                                <li><strong>Screenshots:</strong> Dashboard errors or configuration screens</li>
+                            </ul>
+                            
+                            <h3>Service Level Agreement</h3>
+                            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 my-6">
+                                <h4 class="font-bold mb-4">Response Times</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span>Critical Issues (Server down, active attacks)</span>
+                                        <span class="font-medium">≤ 15 minutes</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>High Priority (Performance issues)</span>
+                                        <span class="font-medium">≤ 2 hours</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Normal Issues (Configuration, questions)</span>
+                                        <span class="font-medium">≤ 24 hours</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Low Priority (Feature requests, general inquiries)</span>
+                                        <span class="font-medium">≤ 48 hours</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
                 
-                <div class="space-y-6">
-                    <h3 class="text-xl font-bold">Dashboard Features</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <h4 class="font-semibold mb-2">📊 Real-time Analytics</h4>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Track player counts, connection health, and server performance with live graphs and metrics.</p>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold mb-2">🚨 Attack Monitoring</h4>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">View detailed logs of blocked attacks, traffic patterns, and threat analysis.</p>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold mb-2">⚙️ Custom Settings</h4>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Configure offline MOTD, kick messages, and protection sensitivity levels.</p>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold mb-2">📧 Notifications</h4>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Get instant alerts via email or webhook when attacks are detected or blocked.</p>
-                        </div>
+                <!-- Table of Contents -->
+                <div class="w-64 p-6">
+                    <div class="toc">
+                        <h4 class="font-semibold text-sm text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3">On This Page</h4>
+                        <nav id="toc-nav" class="space-y-1">
+                            <!-- Generated by JavaScript -->
+                        </nav>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Support -->
-        <section id="support" class="animate-fade-in">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Expert Support</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Our team is here to help you stay protected</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Contact Form -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-2xl font-bold mb-6">Get In Touch</h3>
-                    <form class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Server Domain/IP</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="play.yourserver.com">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Expected Players</label>
-                            <select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                                <option>1-50 players</option>
-                                <option>51-200 players</option>
-                                <option>201-500 players</option>
-                                <option>500+ players</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Message</label>
-                            <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Tell us about your server and protection needs..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-orange-600 text-white font-medium py-2 px-4 rounded-lg hover:from-red-700 hover:to-orange-700 transition-colors">
-                            Send Message
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- Support Info -->
-                <div class="space-y-8">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                        <h4 class="text-lg font-bold mb-3">Response Times</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Initial Response</span>
-                                <span class="font-semibold">Within 24 hours</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Technical Support</span>
-                                <span class="font-semibold">24/7 availability</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Emergency Issues</span>
-                                <span class="font-semibold">Immediate assistance</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                        <h4 class="text-lg font-bold mb-3">What Our Customers Say</h4>
-                        <div class="space-y-4">
-                            <blockquote class="border-l-4 border-red-500 pl-4">
-                                <p class="text-gray-600 dark:text-gray-400 italic">"Great performance and perfect customer service! My server has never been more stable."</p>
-                                <footer class="text-sm text-gray-500 mt-2">- Streamer and Owner of Loxxler.de</footer>
-                            </blockquote>
-                            <blockquote class="border-l-4 border-red-500 pl-4">
-                                <p class="text-gray-600 dark:text-gray-400 italic">"Great service and good protection! Haven't experienced any downtime since switching."</p>
-                                <footer class="text-sm text-gray-500 mt-2">- Streamer and Owner of knewstm.de</footer>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <div class="text-2xl font-bold gradient-text mb-4">🛡️ FastAsFuck</div>
-                <p class="text-gray-400 mb-6">Ultimate DDoS Protection for Minecraft Servers</p>
-                <div class="flex justify-center space-x-6 mb-6">
-                    <a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a>
-                    <a href="#setup" class="text-gray-400 hover:text-white transition-colors">Setup Guide</a>
-                    <a href="#support" class="text-gray-400 hover:text-white transition-colors">Support</a>
-                    <a href="https://fastasfuck.net" class="text-gray-400 hover:text-white transition-colors">Website</a>
-                </div>
-                <div class="text-sm text-gray-500">
-                    © 2025 FastAsFuck. Protecting Minecraft servers worldwide.
-                </div>
-            </div>
-        </div>
-    </footer>
+        </main>
+    </div>
 
     <script>
         // Theme Toggle
@@ -628,73 +881,154 @@
             const theme = html.classList.contains('dark') ? 'dark' : 'light';
             localStorage.setItem('theme', theme);
         });
-
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
         
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Smooth Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        // Generate Table of Contents
+        function generateTOC() {
+            const headings = document.querySelectorAll('h2, h3, h4');
+            const tocNav = document.getElementById('toc-nav');
+            
+            headings.forEach(heading => {
+                const level = heading.tagName.toLowerCase();
+                const text = heading.textContent;
+                const id = heading.id || text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+                
+                if (!heading.id) {
+                    heading.id = id;
+                }
+                
+                const link = document.createElement('a');
+                link.href = `#${id}`;
+                link.textContent = text;
+                link.className = `block text-sm py-1 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors ${
+                    level === 'h2' ? 'font-medium' : 
+                    level === 'h3' ? 'pl-4' : 'pl-8'
+                }`;
+                
+                tocNav.appendChild(link);
+            });
+        }
+        
+        // Sidebar Navigation
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
                     });
-                    mobileMenu.classList.add('hidden');
+                    
+                    // Update active link
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
                 }
             });
         });
-
-        // Scroll-based animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+        
+        // Search Functionality
+        const searchInput = document.getElementById('search-input');
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const sections = document.querySelectorAll('section');
+            
+            // Clear previous highlights
+            document.querySelectorAll('.search-highlight').forEach(el => {
+                const parent = el.parentNode;
+                parent.replaceChild(document.createTextNode(el.textContent), el);
+                parent.normalize();
+            });
+            
+            if (searchTerm.length > 2) {
+                sections.forEach(section => {
+                    const text = section.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        section.style.display = 'block';
+                        // Highlight search terms
+                        highlightText(section, searchTerm);
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            } else {
+                sections.forEach(section => {
+                    section.style.display = 'block';
+                });
+            }
+        });
+        
+        function highlightText(element, searchTerm) {
+            const walker = document.createTreeWalker(
+                element,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            const textNodes = [];
+            let node;
+            
+            while (node = walker.nextNode()) {
+                textNodes.push(node);
+            }
+            
+            textNodes.forEach(textNode => {
+                const text = textNode.textContent;
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                if (regex.test(text)) {
+                    const highlightedText = text.replace(regex, '<span class="search-highlight">$1</span>');
+                    const wrapper = document.createElement('span');
+                    wrapper.innerHTML = highlightedText;
+                    textNode.parentNode.replaceChild(wrapper, textNode);
                 }
             });
-        }, observerOptions);
-
-        document.querySelectorAll('.animate-fade-in').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-            observer.observe(el);
-        });
-
-        // Active navigation highlight
+        }
+        
+        // Scroll Spy for Sidebar
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
+            let currentSection = '';
             
-            let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (scrollY >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 100) {
+                    currentSection = section.getAttribute('id');
                 }
             });
-
-            navLinks.forEach(link => {
-                link.classList.remove('text-primary-600', 'dark:text-primary-400');
-                link.classList.add('text-gray-700', 'dark:text-gray-300');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.remove('text-gray-700', 'dark:text-gray-300');
-                    link.classList.add('text-primary-600', 'dark:text-primary-400');
+            
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
                 }
             });
+        });
+        
+        // Initialize
+        generateTOC();
+        
+        // Copy code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', () => {
+                const code = block.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    // Show feedback
+                    const original = block.style.background;
+                    block.style.background = '#065f46';
+                    setTimeout(() => {
+                        block.style.background = original;
+                    }, 200);
+                });
+            });
+            
+            block.style.cursor = 'pointer';
+            block.title = 'Click to copy';
         });
     </script>
 </body>
