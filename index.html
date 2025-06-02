@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevDocs - Moderne Dokumentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #5855f0;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 0;
+            position: fixed;
+            width: 280px;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .logo {
+            padding: 0 2rem 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-title {
+            padding: 0 2rem 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.75rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            background: var(--bg-primary);
+        }
+
+        .header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .theme-toggle {
+            padding: 0.5rem;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .content {
+            padding: 3rem;
+            max-width: 900px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 4rem 0;
+            background: var(--gradient);
+            border-radius: 1rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f0f9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 3rem;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'JavaScript';
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .toc {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h4 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .toc a:hover {
+            color: var(--primary-color);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            padding: 0.5rem;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100%;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .content {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">🚀 DevDocs</div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Getting Started</div>
+                <a href="#introduction" class="nav-link active">Einführung</a>
+                <a href="#installation" class="nav-link">Installation</a>
+                <a href="#quickstart" class="nav-link">Schnellstart</a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">API Referenz</div>
+                <a href="#api-overview" class="nav-link">Übersicht</a>
+                <a href="#authentication" class="nav-link">Authentifizierung</a>
+                <a href="#endpoints" class="nav-link">Endpunkte</a>
+                <a href="#examples" class="nav-link">Beispiele</a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Erweitert</div>
+                <a href="#configuration" class="nav-link">Konfiguration</a>
+                <a href="#best-practices" class="nav-link">Best Practices</a>
+                <a href="#troubleshooting" class="nav-link">Fehlerbehebung</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+                
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Dokumentation durchsuchen..." id="searchInput">
+                </div>
+                
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </header>
+
+            <div class="content">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h1>Moderne Dokumentation</h1>
+                        <p>Entdecken Sie unsere umfassende API-Dokumentation mit interaktiven Beispielen und modernem Design</p>
+                        <a href="#quickstart" class="cta-button">Jetzt starten →</a>
+                    </div>
+                </div>
+
+                <div class="toc">
+                    <h4>📋 Inhaltsverzeichnis</h4>
+                    <ul>
+                        <li><a href="#introduction">Einführung</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#installation">Installation</a></li>
+                        <li><a href="#quickstart">Schnellstart</a></li>
+                        <li><a href="#api-overview">API Übersicht</a></li>
+                    </ul>
+                </div>
+
+                <section id="introduction" class="section fade-in">
+                    <h2>🎯 Einführung</h2>
+                    <div class="card">
+                        <h3>Willkommen bei DevDocs</h3>
+                        <p>Diese moderne Dokumentationswebsite bietet Ihnen alle Informationen, die Sie für den erfolgreichen Einsatz unserer API benötigen. Mit einem benutzerfreundlichen Design, interaktiven Beispielen und umfassenden Erklärungen führen wir Sie durch alle Funktionen und Möglichkeiten.</p>
+                        
+                        <p>Unsere Dokumentation ist darauf ausgelegt, sowohl Anfängern als auch erfahrenen Entwicklern zu helfen. Sie finden hier:</p>
+                        <ul style="margin: 1rem 0; padding-left: 2rem;">
+                            <li>Schritt-für-Schritt Anleitungen</li>
+                            <li>Vollständige API-Referenz</li>
+                            <li>Praktische Code-Beispiele</li>
+                            <li>Best Practices und Tipps</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="features" class="section fade-in">
+                    <h2>✨ Features</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>Schnell & Performant</h3>
+                            <p>Optimiert für maximale Geschwindigkeit und beste Benutzererfahrung mit modernsten Web-Technologien.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🎨</div>
+                            <h3>Modernes Design</h3>
+                            <p>Sauberes, intuitives Design mit Dark/Light Mode und responsivem Layout für alle Geräte.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🔍</div>
+                            <h3>Intelligente Suche</h3>
+                            <p>Finden Sie schnell was Sie suchen mit unserer erweiterten Suchfunktion und Filteroptionen.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">📱</div>
+                            <h3>Mobile-First</h3>
+                            <p>Vollständig responsive und optimiert für die Nutzung auf Smartphones und Tablets.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="installation" class="section fade-in">
+                    <h2>📦 Installation</h2>
+                    <div class="card">
+                        <h3>NPM Installation</h3>
+                        <p>Installieren Sie unser Paket mit npm:</p>
+                        <div class="code-block">
+npm install devdocs-api --save</div>
+                        
+                        <h3>CDN Einbindung</h3>
+                        <p>Oder nutzen Sie unser CDN für eine schnelle Integration:</p>
+                        <div class="code-block">
+&lt;script src="https://cdn.devdocs.io/v1/devdocs.min.js"&gt;&lt;/script&gt;</div>
+                    </div>
+                </section>
+
+                <section id="quickstart" class="section fade-in">
+                    <h2>🚀 Schnellstart</h2>
+                    <div class="card">
+                        <h3>Erste Schritte</h3>
+                        <p>Hier ist ein einfaches Beispiel, um sofort loszulegen:</p>
+                        <div class="code-block">
+// Initialisierung der DevDocs API
+const api = new DevDocsAPI({
+    apiKey: 'ihr-api-schluessel',
+    baseURL: 'https://api.devdocs.io/v1'
+});
+
+// Erste API-Anfrage
+async function getData() {
+    try {
+        const response = await api.get('/users');
+        console.log('Benutzer:', response.data);
+    } catch (error) {
+        console.error('Fehler:', error.message);
+    }
+}
+
+getData();</div>
+                    </div>
+                </section>
+
+                <section id="api-overview" class="section fade-in">
+                    <h2>🔗 API Übersicht</h2>
+                    <div class="card">
+                        <h3>Verfügbare Endpunkte</h3>
+                        <p>Unsere API bietet folgende Hauptendpunkte:</p>
+                        
+                        <div style="margin: 1.5rem 0;">
+                            <strong>GET /users</strong> - Alle Benutzer abrufen<br>
+                            <strong>POST /users</strong> - Neuen Benutzer erstellen<br>
+                            <strong>GET /users/{id}</strong> - Spezifischen Benutzer abrufen<br>
+                            <strong>PUT /users/{id}</strong> - Benutzer aktualisieren<br>
+                            <strong>DELETE /users/{id}</strong> - Benutzer löschen
+                        </div>
+                        
+                        <p>Alle Endpunkte unterstützen JSON-Format und erfordern eine gültige API-Authentifizierung.</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme Toggle Funktionalität
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Gespeichertes Theme laden
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = '☀️';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                themeToggle.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Mobile Menu Funktionalität
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Navigation Links
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Aktiven Link setzen
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Mobile Menu schließen
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        });
+
+        // Smooth Scrolling für Anker-Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Suchfunktionalität
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm) || searchTerm === '') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+
+        // Fade-in Animation beim Scrollen
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + K für Suche
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            
+            // Escape zum Schließen des Mobile Menus
+            if (e.key === 'Escape') {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Parallax Effekt für Hero Section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
